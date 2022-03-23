@@ -4,6 +4,8 @@
  */
 package budzet.view;
 
+import javax.swing.ImageIcon;
+
 /**
  *
  * @author Ivan
@@ -19,6 +21,10 @@ public class IzbornikProzor extends javax.swing.JFrame {
     }
     private void postavke(){
         setTitle("Izbornik moje super duper app");
+        
+        ImageIcon img = new ImageIcon("C:\\Users\\Ivan\\Documents\\NetBeansProjects\\KucniBudzet\\src\\main\\resources\\Gica.jpg");
+        this.setIconImage(img.getImage());
+        
     }
 
     /**

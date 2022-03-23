@@ -5,6 +5,7 @@
 package budzet.view;
 
 import budzet.util.HibernateUtil;
+import javax.swing.JOptionPane;
 import org.hibernate.Session;
 import org.hibernate.engine.spi.SessionOwner;
 
@@ -13,10 +14,10 @@ import org.hibernate.engine.spi.SessionOwner;
  * @author Ivan
  */
 public class SplashScreen extends javax.swing.JFrame {
-    
-    private int i=0;
+
+    private int i = 0;
     private boolean hibernateGotov;
-    
+
     /**
      * Creates new form SplashScreen
      */
@@ -69,56 +70,64 @@ public class SplashScreen extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
-    
     private void postavke() {
-        i=0;
+        i = 0;
         hibernateGotov = false;
         Ucitanje ucitanje = new Ucitanje();
         ucitanje.start();
         TijekUcitanja tijekUcitanja = new TijekUcitanja();
         tijekUcitanja.start();
     }
-    
-    private class TijekUcitanja extends Thread{
+
+    private class TijekUcitanja extends Thread {
 
         @Override
         public void run() {
-            if(hibernateGotov){
+            if (hibernateGotov) {
                 return;
             }
-        
+
             try {
                 pbUcitavanje.setValue(++i);
                 Thread.sleep(1000);
                 run();
             } catch (InterruptedException e) {
             }
-        
+
         }
-        
-        
+
     }
-    
-    private class Ucitanje extends Thread{
+
+    private class Ucitanje extends Thread {
 
         @Override
         public void run() {
             Session s = HibernateUtil.getSession();
-            if(s.getMetamodel().getEntities().size()>0){
+            if (s.getMetamodel().getEntities().size() > 0) {
                 hibernateGotov = true;
-                
-            }
+                for (int t = i; t < 100; t++) {
+                    try {
+                        pbUcitavanje.setValue(++i);
+                        Thread.sleep(3);
+                    } catch (InterruptedException ex) {
+                       
+                    }
+                }
+                    new IzbornikProzor().setVisible(true);
+                    dispose();
+                }else{
+                        JOptionPane.showMessageDialog(getRootPane(), "Greška pri učitavanju");
+                        }
+
+            
         }
-        
-        
-        
+
     }
-    
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
     private javax.swing.JProgressBar pbUcitavanje;
     // End of variables declaration//GEN-END:variables
 
-    
 }

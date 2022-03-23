@@ -5,7 +5,10 @@ budzet\model\Rashod.class
 budzet\util\HibernateUtil.class
 budzet\controller\ObradaOsoba.class
 budzet\view\SplashScreen.class
+budzet\view\SplashScreen$Ucitanje.class
 budzet\model\Prihod.class
 budzet\util\MojException.class
 budzet\util\PocetniInsert.class
+budzet\view\SplashScreen$TijekUcitanja.class
 budzet\Start.class
+budzet\view\IzbornikProzor.class
