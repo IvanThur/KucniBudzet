@@ -8,7 +8,7 @@
             
             <!--
 Potrebno je ručno kreirati bazu
-    create database edunovajp25hib character set utf8mb4;
+    create database budzethib character set utf8mb4;
  -->
         
 <hibernate-configuration>
