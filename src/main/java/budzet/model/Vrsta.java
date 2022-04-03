@@ -20,7 +20,7 @@ public class Vrsta {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int sifra;
     private String naziv;
-    private boolean prihod;
+    /*private boolean prihod;
 
     public boolean isPrihod() {
         return prihod;
@@ -28,7 +28,7 @@ public class Vrsta {
 
     public void setPrihod(boolean prihod) {
         this.prihod = prihod;
-    }
+    }*/
 
     public String getNaziv() {
         return naziv;

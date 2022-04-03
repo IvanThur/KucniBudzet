@@ -12,7 +12,7 @@ import org.hibernate.Session;
 /**
  *
  * @author Ivan
- * 
+ *
  */
 public abstract class Obrada<T> {
 
@@ -26,31 +26,31 @@ public abstract class Obrada<T> {
     protected abstract void kontrolaUpdate() throws MojException;
 
     protected abstract void kontrolaDelete() throws MojException;
-    
-    public Obrada(){
-        session=HibernateUtil.getSession();
+
+    public Obrada() {
+        session = HibernateUtil.getSession();
     }
-    
-    public T create() throws MojException{
+
+    public T create() throws MojException {
         kontrolaCreate();
         save();
         return entitet;
     }
-    
-    public T update() throws MojException{
+
+    public T update() throws MojException {
         kontrolaUpdate();
         save();
         return entitet;
     }
-    
-    public void delete() throws MojException{
+
+    public void delete() throws MojException {
         kontrolaDelete();
         session.beginTransaction();
         session.delete(entitet);
         session.getTransaction().commit();
     }
-    
-    private void save(){
+
+    private void save() {
         session.beginTransaction();
         session.save(entitet);
         session.getTransaction().commit();
