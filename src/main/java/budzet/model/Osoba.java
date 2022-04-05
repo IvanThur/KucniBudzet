@@ -5,20 +5,14 @@
 package budzet.model;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 
 /**
  *
  * @author Ivan
  */
 @Entity
-public class Osoba {
+public class Osoba extends Entitet{
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int sifra;
     private String ime;
     private String prezime;
 

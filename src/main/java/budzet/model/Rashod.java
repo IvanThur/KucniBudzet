@@ -6,25 +6,16 @@ package budzet.model;
 
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.List;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Temporal;
 
 /**
  *
  * @author Ivan
  */
 @Entity
-public class Rashod{
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int sifra;
+public class Rashod extends Entitet{
+
     @ManyToOne
     private Vrsta vrsta;
     private Date datum;
@@ -33,13 +24,7 @@ public class Rashod{
     private BigDecimal kolicina;
     private BigDecimal cijena;
 
-    public int getSifra() {
-        return sifra;
-    }
-
-    public void setSifra(int sifra) {
-        this.sifra = sifra;
-    }
+    
 
     public Vrsta getVrsta() {
         return vrsta;
@@ -65,8 +50,6 @@ public class Rashod{
         this.platitelj = platitelj;
     }
 
-    
-
     public BigDecimal getKolicina() {
         return kolicina;
     }
@@ -83,9 +66,4 @@ public class Rashod{
         this.cijena = cijena;
     }
 
-   
-    
-    
-            
-    
 }

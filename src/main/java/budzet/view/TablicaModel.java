@@ -5,6 +5,7 @@
 package budzet.view;
 
 import budzet.model.Prihod;
+import budzet.model.Rashod;
 import java.util.List;
 import javax.swing.table.AbstractTableModel;
 
@@ -15,20 +16,21 @@ import javax.swing.table.AbstractTableModel;
 public class TablicaModel extends AbstractTableModel {
     
     private List<Prihod> prihod;
+    private List<Rashod> rashod;
+    
+    
     
     @Override
     public int getRowCount() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        
     }
 
     @Override
     public int getColumnCount() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
     
     

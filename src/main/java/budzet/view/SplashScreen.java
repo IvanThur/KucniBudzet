@@ -7,7 +7,6 @@ package budzet.view;
 import budzet.util.HibernateUtil;
 import javax.swing.JOptionPane;
 import org.hibernate.Session;
-import org.hibernate.engine.spi.SessionOwner;
 
 /**
  *
@@ -113,7 +112,7 @@ public class SplashScreen extends javax.swing.JFrame {
                        
                     }
                 }
-                    new IzbornikProzor().setVisible(true);
+                    new Autorizacija().setVisible(true);
                     dispose();
                 }else{
                         JOptionPane.showMessageDialog(getRootPane(), "Greška pri učitavanju");
