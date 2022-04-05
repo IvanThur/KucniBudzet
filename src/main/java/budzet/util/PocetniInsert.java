@@ -4,17 +4,18 @@
  */
 package budzet.util;
 
+import budzet.model.Operater;
 import budzet.model.Osoba;
 import budzet.model.Prihod;
 import budzet.model.Rashod;
 import budzet.model.Vrsta;
 import com.github.javafaker.Faker;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import org.hibernate.Session;
+import org.mindrot.jbcrypt.BCrypt;
 
 /**
  *
@@ -29,10 +30,39 @@ public class PocetniInsert {
 
         List<Osoba> osobe = generirajOsobe(faker, session);
         List<Vrsta> vrste = generirajVrste(faker,session);
+        
+        Osoba o;
+        Vrsta v = null;
+        Prihod p;
+        for (int i = 0; i < osobe.size() - 2; i++) {
+            o = osobe.get(i);
+            for (int j = 0; j < ((int) Math.random() * (5 - 2) + 2); j++) {
+                p = new Prihod();
+                p.setVrsta(v);
+                p.setPrimatelj(o);
+                p.setDatumPlacanja(new Date());
+                Collections.shuffle(osobe);
+                session.save(p);
+                System.out.println("Kreirao grupu: " + p.getVrsta());
+            }
+        }
+      
        
         
         session.getTransaction().commit();
 
+    }
+    
+    public static void unosOperatera() {
+        Session session = HibernateUtil.getSession();
+        session.beginTransaction();
+
+        Operater o = new Operater();
+        o.setUloga("oper");
+        o.setEmail("admin@admin.hr");
+        o.setLozinka(BCrypt.hashpw("admin", BCrypt.gensalt()));
+        session.save(o);
+        session.getTransaction().commit();
     }
     
     private static List<Osoba> generirajOsobe(Faker faker, Session session) {
@@ -48,38 +78,21 @@ public class PocetniInsert {
         }
         return osobe;
     }
-    /*private static List<Polaznik> generirajPolaznike(Faker faker, Session session) {
-        List<Polaznik> polaznici = new ArrayList();
-        Polaznik p;
-        for (int i = 0; i < 3000; i++) {
-            p = new Polaznik();
-            p.setIme(faker.name().firstName());
-            p.setPrezime(faker.name().lastName());
-            p.setEmail(faker.name().firstName().substring(0, 1).toLowerCase()
-                    + faker.name().lastName().toLowerCase().replace(" ", "")
-                    + "@edunova.hr");
-            p.setOib(EdunovaUtil.generirajOib());
-            p.setBrojUgovora((i + 1) + "/2022");
-            session.save(p);
-            polaznici.add(p);
-            System.out.println("Krierao polaznika: " + p.getIme() + " " + p.getOib());
-        }
-        return polaznici;
-    }*/
 
 
     private static List<Vrsta> generirajVrste(Faker faker, Session session) {
-       List<Vrsta> vrste = new ArrayList();
+       List<Vrsta> vrste = new ArrayList<>();
         Vrsta v;
-        for (int i = 0; i < 10; i++) {
+        
             v = new Vrsta();
             v.setNaziv(faker.beer().name());
             session.save(v);
             vrste.add(v);
             System.out.println("Kreirao vrstu: " + v.getNaziv());
-        }
+        
         return vrste;
     }
+    
 
     
 }

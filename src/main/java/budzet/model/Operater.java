@@ -11,7 +11,7 @@ import javax.persistence.Entity;
  * @author Ivan
  */
 @Entity
-public class Operater extends Osoba{
+public class Operater extends Entitet{
     
     private String email;
 

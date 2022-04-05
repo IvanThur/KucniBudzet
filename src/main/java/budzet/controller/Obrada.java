@@ -22,9 +22,7 @@ public abstract class Obrada<T> {
     public abstract List<T> read();
 
     protected abstract void kontrolaCreate() throws MojException;
-
     protected abstract void kontrolaUpdate() throws MojException;
-
     protected abstract void kontrolaDelete() throws MojException;
 
     public Obrada() {

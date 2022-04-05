@@ -4,6 +4,7 @@
  */
 package budzet;
 
+import budzet.util.PocetniInsert;
 import budzet.view.SplashScreen;
 
 /**
@@ -13,6 +14,8 @@ import budzet.view.SplashScreen;
 public class Start {
 
     public static void main(String[] args) {
+        //budzet.util.PocetniInsert.unosOperatera();
+        //PocetniInsert.izvedi();
         new SplashScreen().setVisible(true);
 
     }

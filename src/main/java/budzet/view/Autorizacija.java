@@ -31,7 +31,7 @@ public class Autorizacija extends javax.swing.JFrame {
     private void postavke() {
         obradaOperater = new ObradaOperater();
         setTitle("Autorizacija");
-        txtEmail.setText("admin");
+        txtEmail.setText("admin@admin.hr");
         txtLozinka.setText("admin");
 
     }
