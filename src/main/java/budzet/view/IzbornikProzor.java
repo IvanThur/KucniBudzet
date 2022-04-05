@@ -39,6 +39,7 @@ public class IzbornikProzor extends javax.swing.JFrame {
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         mPrihod = new javax.swing.JMenu();
+        mRashod = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -65,6 +66,14 @@ public class IzbornikProzor extends javax.swing.JFrame {
             }
         });
         jMenuBar1.add(mPrihod);
+
+        mRashod.setText("Rashod");
+        mRashod.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                mRashodMouseClicked(evt);
+            }
+        });
+        jMenuBar1.add(mRashod);
 
         setJMenuBar(jMenuBar1);
 
@@ -93,6 +102,10 @@ public class IzbornikProzor extends javax.swing.JFrame {
         new PrihodProzor().setVisible(true);
     }//GEN-LAST:event_mPrihodMouseClicked
 
+    private void mRashodMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_mRashodMouseClicked
+        new RashodProzor().setVisible(true);
+    }//GEN-LAST:event_mRashodMouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -105,6 +118,7 @@ public class IzbornikProzor extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
     private javax.swing.JMenu mPrihod;
+    private javax.swing.JMenu mRashod;
     // End of variables declaration//GEN-END:variables
 
 }
