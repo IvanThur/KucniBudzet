@@ -4,7 +4,9 @@
  */
 package budzet.view;
 
+import budzet.controller.ObradaOperater;
 import budzet.util.HibernateUtil;
+import budzet.util.PocetniInsert;
 import javax.swing.JOptionPane;
 import org.hibernate.Session;
 
@@ -103,6 +105,9 @@ public class SplashScreen extends javax.swing.JFrame {
         public void run() {
             Session s = HibernateUtil.getSession();
             if (s.getMetamodel().getEntities().size() > 0) {
+                if(new ObradaOperater().read().isEmpty()){
+                    PocetniInsert.inicijalniTestPodaci();
+                }
                 hibernateGotov = true;
                 for (int t = i; t < 100; t++) {
                     try {

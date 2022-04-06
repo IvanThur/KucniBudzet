@@ -38,10 +38,19 @@ public class ObradaOperater extends Obrada<Operater>{
         
         return BCrypt.checkpw(lozinka, operater.getLozinka()) ?  operater : null;
     }
+    
+    private void kontrolaEmail()throws MojException{
+         List<Operater> lista = session.createQuery("from Operater o where o.email=:email")
+                .setParameter("email", entitet.getEmail()).list();
+        
+        if(lista!=null && lista.size()>0){
+            throw new MojException("Već postoji");
+        }
+    }
 
     @Override
     protected void kontrolaCreate() throws MojException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        kontrolaEmail();
     }
 
     @Override

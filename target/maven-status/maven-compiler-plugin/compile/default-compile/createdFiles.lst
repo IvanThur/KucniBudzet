@@ -1,7 +1,9 @@
 budzet\controller\Obrada.class
+budzet\view\PrihodProzor$3.class
 budzet\controller\ObradaPrihod.class
 budzet\controller\ObradaOperater.class
 budzet\view\Autorizacija.class
+budzet\view\RashodProzor$3.class
 budzet\controller\ObradaOsoba.class
 budzet\view\RashodProzor.class
 budzet\controller\ObradaRashod.class
@@ -25,8 +27,11 @@ budzet\view\Autorizacija$3.class
 budzet\view\RashodProzor$2.class
 budzet\view\PrihodProzor.class
 budzet\util\HibernateUtil.class
+budzet\view\RashodProzor$4.class
+budzet\view\PrihodProzor$4.class
 budzet\util\BudzetUtil.class
 budzet\view\TablicaModelPrihod.class
+budzet\view\RashodProzor$5.class
 budzet\view\Autorizacija$1.class
 budzet\view\SplashScreen$Ucitanje.class
 budzet\view\SplashScreen$TijekUcitanja.class

@@ -23,37 +23,12 @@ import org.mindrot.jbcrypt.BCrypt;
  * @author Ivan
  */
 public class PocetniInsert {
-
-    public static void izvedi() {
-        Session session = HibernateUtil.getSession();
-        session.beginTransaction();
-        Faker faker = new Faker();
-
-        List<Osoba> osobe = generirajOsobe(faker, session);
-        List<Vrsta> vrste = generirajVrste(faker, session);
-
-        Osoba o;
-        Vrsta v;
-        Prihod p;
-        for (int i = 0; i < vrste.size() - 2; i++) {
-            o = osobe.get(i);
-            v = vrste.get(i);
-            for (int j = 0; j < ((int) Math.random() * (10 - 2) + 2); j++) {
-                p = new Prihod();
-                p.setVrsta(v);
-                p.setPrimatelj(o);
-                p.setDatumPlacanja(new Date());
-                p.setIznos(new BigDecimal(Math.random() * (10000 - 5000) + 5000));
-                Collections.shuffle(osobe);
-                session.save(p);
-
-            }
-        }
-
-        session.getTransaction().commit();
-
+    
+    public static void inicijalniTestPodaci(){
+        PocetniInsert.unosOperatera();
+        PocetniInsert.izvedi();
     }
-
+    
     public static void unosOperatera() {
         Session session = HibernateUtil.getSession();
         session.beginTransaction();
@@ -65,7 +40,7 @@ public class PocetniInsert {
         session.save(o);
         session.getTransaction().commit();
     }
-
+    
     private static List<Osoba> generirajOsobe(Faker faker, Session session) {
         List<Osoba> osobe = new ArrayList();
         Osoba o;
@@ -79,11 +54,11 @@ public class PocetniInsert {
         }
         return osobe;
     }
-
+    
     private static List<Vrsta> generirajVrste(Faker faker, Session session) {
         List<Vrsta> vrste = new ArrayList<>();
         Vrsta v;
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 20; i++) {
             v = new Vrsta();
             v.setNaziv(faker.beer().name());
             session.save(v);
@@ -92,5 +67,57 @@ public class PocetniInsert {
         }
         return vrste;
     }
+
+    public static void izvedi() {
+        Session session = HibernateUtil.getSession();
+        session.beginTransaction();
+        Faker faker = new Faker();
+
+        List<Osoba> osobe = generirajOsobe(faker, session);
+        List<Vrsta> vrste = generirajVrste(faker, session);
+
+        Osoba o;
+        Vrsta v;
+        Prihod p;
+        Rashod r;
+        for (int i = 0; i < osobe.size() - 2; i++) {
+            o = osobe.get(i);
+            v = vrste.get(i);
+            for (int j = 0; j < ((int) Math.random() * (10 - 2) + 2); j++) {
+                p = new Prihod();
+                p.setVrsta(v);
+                p.setPrimatelj(o);
+                p.setDatumPlacanja(new Date());
+                p.setIznos(new BigDecimal(Math.random() * (10000 - 5000) + 5000));
+                Collections.shuffle(osobe);
+                session.save(p);
+
+            }
+        }
+        for (int i = 0; i < osobe.size() - 2; i++) {
+            o = osobe.get(i);
+            v = vrste.get(i);
+            for (int j = 0; j < ((int) Math.random() * (10 - 2) + 2); j++) {
+                r = new Rashod();
+                r.setVrsta(v);
+                r.setPlatitelj(o);
+                r.setDatum(new Date());
+                r.setCijena(new BigDecimal(Math.random() * (10000 - 5000) + 5000));
+                Collections.shuffle(osobe);
+                session.save(r);
+
+            }
+        }
+        
+
+        session.getTransaction().commit();
+
+    }
+
+    
+
+    
+
+    
 
 }

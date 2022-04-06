@@ -12,7 +12,7 @@ import java.util.List;
  *
  * @author Ivan
  */
-public abstract class ObradaOsoba<T extends Osoba> extends Obrada<T>{
+public class ObradaOsoba<T extends Osoba> extends Obrada<T>{
 
     @Override
     public List read() {

@@ -15,7 +15,7 @@ Potrebno je ručno kreirati bazu
     <session-factory>
         <!-- JDBC Database connection settings -->
         <property name="connection.driver_class">org.mariadb.jdbc.Driver</property>
-        <property name="connection.url">jdbc:mariadb://localhost:3306/budzethib?createDatabaseIfNotExist=true</property>
+        <property name="connection.url">jdbc:mariadb://localhost:3306/budzetdb?createDatabaseIfNotExist=true</property>
         <property name="connection.username">edunova</property>
         <property name="connection.password">edunova</property>
         <!-- JDBC connection pool settings ... using built-in test pool -->
