@@ -10,6 +10,7 @@ import budzet.model.Prihod;
 import budzet.model.Rashod;
 import budzet.model.Vrsta;
 import com.github.javafaker.Faker;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -22,37 +23,37 @@ import org.mindrot.jbcrypt.BCrypt;
  * @author Ivan
  */
 public class PocetniInsert {
-    
+
     public static void izvedi() {
         Session session = HibernateUtil.getSession();
         session.beginTransaction();
         Faker faker = new Faker();
 
         List<Osoba> osobe = generirajOsobe(faker, session);
-        List<Vrsta> vrste = generirajVrste(faker,session);
-        
+        List<Vrsta> vrste = generirajVrste(faker, session);
+
         Osoba o;
-        Vrsta v = null;
+        Vrsta v;
         Prihod p;
-        for (int i = 0; i < osobe.size() - 2; i++) {
+        for (int i = 0; i < vrste.size() - 2; i++) {
             o = osobe.get(i);
-            for (int j = 0; j < ((int) Math.random() * (5 - 2) + 2); j++) {
+            v = vrste.get(i);
+            for (int j = 0; j < ((int) Math.random() * (10 - 2) + 2); j++) {
                 p = new Prihod();
                 p.setVrsta(v);
                 p.setPrimatelj(o);
                 p.setDatumPlacanja(new Date());
+                p.setIznos(new BigDecimal(Math.random() * (10000 - 5000) + 5000));
                 Collections.shuffle(osobe);
                 session.save(p);
-                System.out.println("Kreirao grupu: " + p.getVrsta());
+
             }
         }
-      
-       
-        
+
         session.getTransaction().commit();
 
     }
-    
+
     public static void unosOperatera() {
         Session session = HibernateUtil.getSession();
         session.beginTransaction();
@@ -64,7 +65,7 @@ public class PocetniInsert {
         session.save(o);
         session.getTransaction().commit();
     }
-    
+
     private static List<Osoba> generirajOsobe(Faker faker, Session session) {
         List<Osoba> osobe = new ArrayList();
         Osoba o;
@@ -74,25 +75,22 @@ public class PocetniInsert {
             o.setPrezime(faker.name().lastName());
             session.save(o);
             osobe.add(o);
-            System.out.println("Kreirao osobu: " + o.getIme()+" "+o.getPrezime());
+            System.out.println("Kreirao osobu: " + o.getIme() + " " + o.getPrezime());
         }
         return osobe;
     }
 
-
     private static List<Vrsta> generirajVrste(Faker faker, Session session) {
-       List<Vrsta> vrste = new ArrayList<>();
+        List<Vrsta> vrste = new ArrayList<>();
         Vrsta v;
-        
+        for (int i = 0; i < 10; i++) {
             v = new Vrsta();
             v.setNaziv(faker.beer().name());
             session.save(v);
             vrste.add(v);
             System.out.println("Kreirao vrstu: " + v.getNaziv());
-        
+        }
         return vrste;
     }
-    
 
-    
 }

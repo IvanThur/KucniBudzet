@@ -5,6 +5,7 @@
 package budzet.controller;
 
 import budzet.model.Operater;
+import budzet.util.MojException;
 import java.util.List;
 import javax.persistence.NoResultException;
 import org.mindrot.jbcrypt.BCrypt;
@@ -13,7 +14,7 @@ import org.mindrot.jbcrypt.BCrypt;
  *
  * @author Ivan
  */
-public class ObradaOperater extends ObradaOsoba<Operater>{
+public class ObradaOperater extends Obrada<Operater>{
     
     @Override
     public List<Operater> read() {
@@ -36,6 +37,21 @@ public class ObradaOperater extends ObradaOsoba<Operater>{
         
         
         return BCrypt.checkpw(lozinka, operater.getLozinka()) ?  operater : null;
+    }
+
+    @Override
+    protected void kontrolaCreate() throws MojException {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    protected void kontrolaUpdate() throws MojException {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    protected void kontrolaDelete() throws MojException {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
     
 }

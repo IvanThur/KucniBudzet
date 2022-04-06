@@ -11,9 +11,11 @@ import javax.persistence.Entity;
  * @author Ivan
  */
 @Entity
-public class Operater extends Entitet{
-    
+public class Operater extends Entitet {
+
     private String email;
+    private String lozinka;
+    private String uloga;
 
     public String getEmail() {
         return email;
@@ -22,8 +24,6 @@ public class Operater extends Entitet{
     public void setEmail(String email) {
         this.email = email;
     }
-    private String lozinka;
-    private String uloga;
 
     public String getLozinka() {
         return lozinka;
@@ -40,7 +40,5 @@ public class Operater extends Entitet{
     public void setUloga(String uloga) {
         this.uloga = uloga;
     }
-    
-    
-    
+
 }

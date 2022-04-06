@@ -35,7 +35,7 @@ public class TablicaModelPrihod extends AbstractTableModel {
         Prihod p = prihodi.get(rowIndex);
         Object value = "??";
         switch (columnIndex) {
-            case 0 -> value = p.getVrsta();
+            case 0 -> value = p.getVrsta().getNaziv();
             case 1 -> value = p.getPrimatelj().getIme();
             case 2 -> value = p.getPrimatelj().getPrezime();
             case 3 -> value = p.getIznos();
