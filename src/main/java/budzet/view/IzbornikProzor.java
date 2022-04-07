@@ -4,13 +4,20 @@
  */
 package budzet.view;
 
+import budzet.controller.Obrada;
+import budzet.model.Stavka;
+import java.util.List;
 import javax.swing.ImageIcon;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
  * @author Ivan
  */
 public class IzbornikProzor extends javax.swing.JFrame {
+    
+    private Obrada obrada;
+    private DefaultTableModel m;
 
     /**
      * Creates new form IzbornikProzor
@@ -23,6 +30,22 @@ public class IzbornikProzor extends javax.swing.JFrame {
         setTitle("Izbornik moje super duper app");
         
         
+    }
+    
+    private void ucitaj() {
+
+        List<Stavka> entiteti = obrada.read();
+        
+        Object[] red = new Object[5];
+
+        for (int i = 0; i < entiteti.size(); i++) {
+            red[0] = entiteti.get(i).getVrsta().getNaziv();
+            red[1] = entiteti.get(i).getOsoba().getIme();
+            red[2] = entiteti.get(i).getOsoba().getPrezime();
+            red[3] = entiteti.get(i).getIznos();
+            red[4] = entiteti.get(i).getDatum();
+            m.addRow(red);
+        }
     }
 
     /**

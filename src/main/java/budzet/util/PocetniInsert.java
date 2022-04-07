@@ -86,8 +86,8 @@ public class PocetniInsert {
             for (int j = 0; j < ((int) Math.random() * (10 - 2) + 2); j++) {
                 p = new Prihod();
                 p.setVrsta(v);
-                p.setPrimatelj(o);
-                p.setDatumPlacanja(new Date());
+                p.setOsoba(o);
+                p.setDatum(new Date());
                 p.setIznos(new BigDecimal(Math.random() * (10000 - 5000) + 5000));
                 Collections.shuffle(osobe);
                 session.save(p);
@@ -100,9 +100,9 @@ public class PocetniInsert {
             for (int j = 0; j < ((int) Math.random() * (10 - 2) + 2); j++) {
                 r = new Rashod();
                 r.setVrsta(v);
-                r.setPlatitelj(o);
+                r.setOsoba(o);
                 r.setDatum(new Date());
-                r.setCijena(new BigDecimal(Math.random() * (10000 - 5000) + 5000));
+                r.setIznos(new BigDecimal(Math.random() * (10000 - 5000) + 5000));
                 Collections.shuffle(osobe);
                 session.save(r);
 

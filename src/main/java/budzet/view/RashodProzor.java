@@ -8,18 +8,37 @@ import budzet.controller.ObradaOsoba;
 import budzet.controller.ObradaRashod;
 import budzet.controller.ObradaVrsta;
 import budzet.model.Osoba;
+import budzet.model.Rashod;
+import budzet.model.Stavka;
 import budzet.model.Vrsta;
+import budzet.util.MojException;
 import com.github.lgooddatepicker.components.DatePickerSettings;
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.text.DecimalFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.ZoneId;
+import java.util.Date;
+import java.util.List;
 import java.util.Locale;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
  * @author Ivan
  */
 public class RashodProzor extends javax.swing.JFrame {
-    
+
+    private DefaultTableModel m;
     private ObradaRashod obrada;
+    private DecimalFormat nf;
+    private SimpleDateFormat df, fd;
+    private Rashod rashod;
 
     /**
      * Creates new form RashodProzor
@@ -27,26 +46,27 @@ public class RashodProzor extends javax.swing.JFrame {
     public RashodProzor() {
         initComponents();
         postavke();
-        
-        
-        
-        
+
     }
-    
-    private void postavke(){
+
+    private void postavke() {
         ucitajOsobe();
         ucitajVrste();
-        
-        obrada = new ObradaRashod();
-        TablicaModelRashod m= new TablicaModelRashod(new ObradaRashod().read());
-        jTable1.setModel(m);
-        
-        
+
+        ucitaj();
+
         DatePickerSettings dps = new DatePickerSettings(new Locale("hr", "HR"));
         dps.setFormatForDatesCommonEra("dd.MM.yyyy");
         dps.setTranslationClear("Očisti");
         dps.setTranslationToday("Danas");
     }
+
+    private void ucitaj() {
+        obrada = new ObradaRashod();
+        TablicaModelRashod m = new TablicaModelRashod(new ObradaRashod().read());
+        tbRashod.setModel(m);
+    }
+
     private void ucitajVrste() {
         DefaultComboBoxModel<Vrsta> ms = new DefaultComboBoxModel<>();
         Vrsta v = new Vrsta();
@@ -58,6 +78,7 @@ public class RashodProzor extends javax.swing.JFrame {
         });
         cmbVrsta.setModel(ms);
     }
+
     private void ucitajOsobe() {
         DefaultComboBoxModel<Osoba> ms = new DefaultComboBoxModel<>();
         Osoba o = new Osoba();
@@ -65,21 +86,38 @@ public class RashodProzor extends javax.swing.JFrame {
         o.setIme("nije");
         o.setPrezime("odabrano");
         ms.addElement(o);
-        new ObradaOsoba<Osoba>().read().forEach(s-> {
+        new ObradaOsoba<Osoba>().read().forEach(s -> {
             ms.addElement((Osoba) s);
         });
         cmbPlatitelj.setModel(ms);
     }
 
-    
+    private void preuzmiVrijednosti() {
+        var e = obrada.getEntitet();
+        e.setVrsta((Vrsta) cmbVrsta.getSelectedItem());
+        e.setOsoba((Osoba) cmbPlatitelj.getSelectedItem());
+        e.setIznos(new BigDecimal(Double.parseDouble(txtIznos.getText())));
+        if (dpDatum.getDate() != null) {
+            e.setDatum(
+                    Date.from(
+                            dpDatum.getDate().atStartOfDay().atZone(
+                                    ZoneId.systemDefault()
+                            ).toInstant()
+                    )
+            );
+        } else {
+            e.setDatum(null);
+        }
+    }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tbRashod = new javax.swing.JTable();
         jPanel2 = new javax.swing.JPanel();
-        datePicker1 = new com.github.lgooddatepicker.components.DatePicker();
+        dpDatum = new com.github.lgooddatepicker.components.DatePicker();
         cmbPlatitelj = new javax.swing.JComboBox<>();
         jLabel1 = new javax.swing.JLabel();
         txtVrsta = new javax.swing.JTextField();
@@ -88,13 +126,13 @@ public class RashodProzor extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         cmbVrsta = new javax.swing.JComboBox<>();
         jLabel2 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        btnKreiraj = new javax.swing.JButton();
+        btnPromjeni = new javax.swing.JButton();
+        btnObrisi = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tbRashod.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null},
                 {null, null, null, null, null},
@@ -113,7 +151,7 @@ public class RashodProzor extends javax.swing.JFrame {
                 return types [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(tbRashod);
 
         cmbPlatitelj.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -135,7 +173,7 @@ public class RashodProzor extends javax.swing.JFrame {
 
         txtIznos.setPreferredSize(new java.awt.Dimension(32, 24));
 
-        jLabel4.setText("Datum primanja");
+        jLabel4.setText("Datum placanja");
 
         jLabel3.setText("Iznos");
 
@@ -147,11 +185,26 @@ public class RashodProzor extends javax.swing.JFrame {
 
         jLabel2.setText("Platitelj");
 
-        jButton1.setText("Kreiraj");
+        btnKreiraj.setText("Kreiraj");
+        btnKreiraj.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnKreirajActionPerformed(evt);
+            }
+        });
 
-        jButton2.setText("Promjeni");
+        btnPromjeni.setText("Promjeni");
+        btnPromjeni.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPromjeniActionPerformed(evt);
+            }
+        });
 
-        jButton3.setText("Obriši");
+        btnObrisi.setText("Obriši");
+        btnObrisi.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnObrisiActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -174,13 +227,13 @@ public class RashodProzor extends javax.swing.JFrame {
                             .addComponent(jLabel4)
                             .addComponent(txtIznos, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(datePicker1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(dpDatum, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
-                                .addComponent(jButton1)
+                                .addComponent(btnKreiraj)
                                 .addGap(18, 18, 18)
-                                .addComponent(jButton2)
+                                .addComponent(btnPromjeni)
                                 .addGap(18, 18, 18)
-                                .addComponent(jButton3)))
+                                .addComponent(btnObrisi)))
                         .addGap(0, 9, Short.MAX_VALUE))))
         );
         jPanel2Layout.setVerticalGroup(
@@ -204,10 +257,10 @@ public class RashodProzor extends javax.swing.JFrame {
                 .addComponent(jLabel4)
                 .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(datePicker1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1)
-                    .addComponent(jButton2)
-                    .addComponent(jButton3))
+                    .addComponent(dpDatum, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnKreiraj)
+                    .addComponent(btnPromjeni)
+                    .addComponent(btnObrisi))
                 .addContainerGap())
         );
 
@@ -252,22 +305,81 @@ public class RashodProzor extends javax.swing.JFrame {
 
     }//GEN-LAST:event_cmbPlatiteljActionPerformed
 
-    
+    private void btnKreirajActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnKreirajActionPerformed
+        try {
+            if (obrada.getEntitet() == null) {
+                obrada.setEntitet(new Rashod());
+            }
+            preuzmiVrijednosti();
+            obrada.create();
+            ucitaj();
+
+        } catch (MojException ex) {
+            JOptionPane.showMessageDialog(getRootPane(), ex.getPoruka());
+        }
+    }//GEN-LAST:event_btnKreirajActionPerformed
+
+    private void btnPromjeniActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPromjeniActionPerformed
+        List<Rashod> entiteti = obrada.read();
+        var red = tbRashod.getSelectedRow();
+        obrada.setEntitet(entiteti.get(red));
+        if (obrada.getEntitet() == null) {
+            JOptionPane.showMessageDialog(getRootPane(), "Prvo odaberite stavku");
+            return;
+        }
+
+        try {
+
+            preuzmiVrijednosti();
+            obrada.update();
+            JOptionPane.showMessageDialog(getRootPane(), "Promjenjeno");
+            ucitaj();
+
+        } catch (MojException ex) {
+            JOptionPane.showMessageDialog(getRootPane(), ex.getPoruka());
+        }
+    }//GEN-LAST:event_btnPromjeniActionPerformed
+
+    private void btnObrisiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnObrisiActionPerformed
+        List<Rashod> entiteti = obrada.read();
+        var red = tbRashod.getSelectedRow();
+        obrada.setEntitet(entiteti.get(red));
+        if (obrada.getEntitet() == null) {
+            JOptionPane.showMessageDialog(getRootPane(), "Prvo odaberite stavku");
+            return;
+        }
+
+        if (JOptionPane.showConfirmDialog(
+                getRootPane(),
+                "Sigurno obrisati ?", "Brisanje", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.NO_OPTION) {
+            return;
+        }
+
+        try {
+
+            obrada.delete();
+            JOptionPane.showMessageDialog(getRootPane(), "Obrisano");
+            ucitaj();
+        } catch (MojException ex) {
+            JOptionPane.showMessageDialog(getRootPane(), ex.getPoruka());
+        }
+    }//GEN-LAST:event_btnObrisiActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnKreiraj;
+    private javax.swing.JButton btnObrisi;
+    private javax.swing.JButton btnPromjeni;
     private javax.swing.JComboBox<Osoba> cmbPlatitelj;
     private javax.swing.JComboBox<Vrsta> cmbVrsta;
-    private com.github.lgooddatepicker.components.DatePicker datePicker1;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
+    private com.github.lgooddatepicker.components.DatePicker dpDatum;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable tbRashod;
     private javax.swing.JTextField txtIznos;
     private javax.swing.JTextField txtVrsta;
     // End of variables declaration//GEN-END:variables

@@ -8,7 +8,7 @@
             
             <!--
 Potrebno je ručno kreirati bazu
-    create database budzethib character set utf8mb4;
+    create database budzetdb character set utf8mb4;
  -->
         
 <hibernate-configuration>

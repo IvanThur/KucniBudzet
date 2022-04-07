@@ -36,10 +36,10 @@ public class TablicaModelPrihod extends AbstractTableModel {
         Object value = "??";
         switch (columnIndex) {
             case 0 -> value = p.getVrsta().getNaziv();
-            case 1 -> value = p.getPrimatelj().getIme();
-            case 2 -> value = p.getPrimatelj().getPrezime();
+            case 1 -> value = p.getOsoba().getIme();
+            case 2 -> value = p.getOsoba().getPrezime();
             case 3 -> value = p.getIznos();
-            case 4 -> value = p.getDatumPlacanja();
+            case 4 -> value = p.getDatum();
         }
         return value;
     }

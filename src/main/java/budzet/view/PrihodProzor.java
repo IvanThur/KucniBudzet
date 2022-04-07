@@ -10,10 +10,12 @@ import budzet.controller.ObradaRashod;
 import budzet.controller.ObradaVrsta;
 import budzet.model.Osoba;
 import budzet.model.Vrsta;
+import budzet.util.MojException;
 import com.github.lgooddatepicker.components.DatePickerSettings;
 import java.util.Locale;
 import javax.persistence.PostLoad;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -95,9 +97,9 @@ public class PrihodProzor extends javax.swing.JFrame {
         jLabel7 = new javax.swing.JLabel();
         cmbVrsta = new javax.swing.JComboBox<>();
         jLabel8 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        btnKreiraj = new javax.swing.JButton();
+        btnPromjeni = new javax.swing.JButton();
+        btnObrisi = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -122,12 +124,6 @@ public class PrihodProzor extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(jTable1);
 
-        cmbPrimatelj1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cmbPrimateljActionPerformed(evt);
-            }
-        });
-
         jLabel5.setText("Naziv Prihoda");
 
         txtVrsta.setText("Upiši novi naziv");
@@ -146,19 +142,18 @@ public class PrihodProzor extends javax.swing.JFrame {
 
         jLabel7.setText("Iznos");
 
-        cmbVrsta.addActionListener(new java.awt.event.ActionListener() {
+        jLabel8.setText("Primatelj");
+
+        btnKreiraj.setText("Kreiraj");
+        btnKreiraj.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cmbVrstaActionPerformed(evt);
+                btnKreirajActionPerformed(evt);
             }
         });
 
-        jLabel8.setText("Primatelj");
+        btnPromjeni.setText("Promjeni");
 
-        jButton1.setText("Kreiraj");
-
-        jButton2.setText("Promjeni");
-
-        jButton3.setText("Obriši");
+        btnObrisi.setText("Obriši");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -180,11 +175,11 @@ public class PrihodProzor extends javax.swing.JFrame {
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addComponent(datePicker2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton1)
+                        .addComponent(btnKreiraj)
                         .addGap(18, 18, 18)
-                        .addComponent(jButton2)
+                        .addComponent(btnPromjeni)
                         .addGap(18, 18, 18)
-                        .addComponent(jButton3)))
+                        .addComponent(btnObrisi)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
@@ -209,9 +204,9 @@ public class PrihodProzor extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jButton1)
-                        .addComponent(jButton2)
-                        .addComponent(jButton3))
+                        .addComponent(btnKreiraj)
+                        .addComponent(btnPromjeni)
+                        .addComponent(btnObrisi))
                     .addComponent(datePicker2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
@@ -254,10 +249,6 @@ public class PrihodProzor extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void cmbVrstaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbVrstaActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_cmbVrstaActionPerformed
-
     private void txtVrstaFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtVrstaFocusLost
         txtVrsta.setText("Upiši novi naziv");
     }//GEN-LAST:event_txtVrstaFocusLost
@@ -266,19 +257,37 @@ public class PrihodProzor extends javax.swing.JFrame {
         txtVrsta.setText("");
     }//GEN-LAST:event_txtVrstaFocusGained
 
-    private void cmbPrimateljActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbPrimateljActionPerformed
+    private void btnKreirajActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnKreirajActionPerformed
+        if (obrada.getEntitet() == null) {
+            JOptionPane.showMessageDialog(getRootPane(), "Prvo odaberite stavku");
+            return;
+        }
 
-    }//GEN-LAST:event_cmbPrimateljActionPerformed
+        if (JOptionPane.showConfirmDialog(
+                getRootPane(),
+                "Sigurno obrisati \"" + obrada.getEntitet().getVrsta()+ "\"?",
+                "Brisanje",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE) == JOptionPane.NO_OPTION) {
+            return;
+        }
+
+        try {
+            obrada.delete();
+        } catch (MojException ex) {
+            JOptionPane.showMessageDialog(getRootPane(), ex.getPoruka());
+        }
+    }//GEN-LAST:event_btnKreirajActionPerformed
 
    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnKreiraj;
+    private javax.swing.JButton btnObrisi;
+    private javax.swing.JButton btnPromjeni;
     private javax.swing.JComboBox<Osoba> cmbPrimatelj1;
     private javax.swing.JComboBox<Vrsta> cmbVrsta;
     private com.github.lgooddatepicker.components.DatePicker datePicker2;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;

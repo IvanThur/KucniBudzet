@@ -36,9 +36,9 @@ public class TablicaModelRashod extends AbstractTableModel {
         Object value = "??";
         switch (columnIndex) {
             case 0 ->value = p.getVrsta();
-            case 1 ->value = p.getPlatitelj().getIme();
-            case 2 ->value = p.getPlatitelj().getPrezime();
-            case 3 ->value = p.getCijena();
+            case 1 ->value = p.getOsoba().getIme();
+            case 2 ->value = p.getOsoba().getPrezime();
+            case 3 ->value = p.getIznos();
             case 4 ->value = p.getDatum();
             case 5 ->value = p.getKolicina();
         }
