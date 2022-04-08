@@ -69,7 +69,7 @@ public class PrihodProzor extends javax.swing.JFrame {
         o.setIme("nije");
         o.setPrezime("odabrano");
         ms.addElement(o);
-        new ObradaOsoba<Osoba>().read().forEach(s-> {
+        new ObradaOsoba().read().forEach(s-> {
             ms.addElement((Osoba) s);
         });
         cmbPrimatelj1.setModel(ms);

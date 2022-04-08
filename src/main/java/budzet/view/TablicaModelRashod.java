@@ -27,7 +27,7 @@ public class TablicaModelRashod extends AbstractTableModel {
 
     @Override
     public int getColumnCount() {
-        return 6;
+        return 5;
     }
 
     @Override
@@ -35,12 +35,11 @@ public class TablicaModelRashod extends AbstractTableModel {
         Rashod p = rashod.get(rowIndex);
         Object value = "??";
         switch (columnIndex) {
-            case 0 ->value = p.getVrsta();
-            case 1 ->value = p.getOsoba().getIme();
-            case 2 ->value = p.getOsoba().getPrezime();
-            case 3 ->value = p.getIznos();
-            case 4 ->value = p.getDatum();
-            case 5 ->value = p.getKolicina();
+            case 0 ->value = p.getVrsta().getNaziv();
+            case 1 ->value = p.getOsoba();
+            case 2 ->value = p.getIznos();
+            case 3 ->value = p.getDatum();
+            case 4 ->value = p.getKolicina();
         }
         return value;
     }

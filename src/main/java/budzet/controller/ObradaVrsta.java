@@ -35,11 +35,9 @@ public class ObradaVrsta extends Obrada<Vrsta>{
     }
 
     private void KontrolaIme() throws MojException {
-        List<Vrsta> lista = session.createQuery("from Vrsta v where e.naziv:naziv").setParameter("naziv", entitet.getNaziv()).list();
-        
-        if(entitet.getNaziv()!=null&&lista.size()>0){
-            throw new MojException("Već postoji");
-        }
+       if(!entitet.getNaziv().matches("\\p{L}+")){
+            throw new MojException("Ime smije sadržavati samo slova");
+       }
     }
     
 }

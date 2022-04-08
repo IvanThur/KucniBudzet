@@ -12,11 +12,11 @@ import java.util.List;
  *
  * @author Ivan
  */
-public class ObradaOsoba<T extends Osoba> extends Obrada<T>{
+public class ObradaOsoba extends Obrada<Osoba> {
 
     @Override
     public List read() {
-       return session.createQuery("from Osoba").list();
+        return session.createQuery("from Osoba").list();
     }
 
     @Override
@@ -26,19 +26,19 @@ public class ObradaOsoba<T extends Osoba> extends Obrada<T>{
 
     @Override
     protected void kontrolaUpdate() throws MojException {
-        
+        kontrolaIme();
     }
 
     @Override
     protected void kontrolaDelete() throws MojException {
-        
+
     }
 
-    private void kontrolaIme() throws MojException{
-        if(!entitet.getIme().matches("\\p{L}+")){
+    private void kontrolaIme() throws MojException {
+        if (!entitet.getIme().matches("\\p{L}+") || !entitet.getPrezime().matches("\\p{L}+")) {
             throw new MojException("Ime smije sadržavati samo slova");
         }
-        
+
     }
-    
+
 }

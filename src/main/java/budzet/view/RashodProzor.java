@@ -10,16 +10,13 @@ import budzet.controller.ObradaVrsta;
 import budzet.model.Osoba;
 import budzet.model.Rashod;
 import budzet.model.Vrsta;
-import budzet.util.HibernateUtil;
 import budzet.util.MojException;
 import com.github.lgooddatepicker.components.DatePickerSettings;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.ZoneId;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -28,7 +25,6 @@ import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import org.hibernate.Session;
 
 /**
  *
@@ -39,37 +35,52 @@ public class RashodProzor extends javax.swing.JFrame {
     private DefaultTableModel m;
     private ObradaRashod obrada;
     private DecimalFormat nf;
-    
+    private ObradaVrsta obradavrsta;
+    private ObradaOsoba obradaosoba;
 
     /**
      * Creates new form RashodProzor
      */
     public RashodProzor() {
         initComponents();
+        postavke();
+        
 
+        
+
+    }
+
+    private void postavke() {
+        obradavrsta = new ObradaVrsta();
+        obradaosoba = new ObradaOsoba();
+        obrada = new ObradaRashod();
+        
+        
+        
+        
         DatePickerSettings dps = new DatePickerSettings(new Locale("hr", "HR"));
         dps.setFormatForDatesCommonEra("dd.MM.yyyy");
         dps.setTranslationClear("Očisti");
         dps.setTranslationToday("Danas");
         dpDatum.setSettings(dps);
+        
         DecimalFormatSymbols symbols = new DecimalFormatSymbols(new Locale("hr", "HR"));
         nf = new DecimalFormat("###,###.00", symbols);
-
-        postavke();
-
-    }
-
-    private void postavke() {
+       
+        
         ucitajOsobe();
         ucitajVrste();
         ucitaj();
+       
 
     }
 
     private void ucitaj() {
-        obrada = new ObradaRashod();
         TablicaModelRashod m = new TablicaModelRashod(new ObradaRashod().read());
         tbRashod.setModel(m);
+        
+        
+    
     }
 
     private void ucitajVrste() {
@@ -91,7 +102,7 @@ public class RashodProzor extends javax.swing.JFrame {
         o.setIme("nije");
         o.setPrezime("odabrano");
         ms.addElement(o);
-        new ObradaOsoba<Osoba>().read().forEach(s -> {
+        new ObradaOsoba().read().forEach(s -> {
             ms.addElement((Osoba) s);
         });
         cmbPlatitelj.setModel(ms);
@@ -119,13 +130,12 @@ public class RashodProzor extends javax.swing.JFrame {
             e.setDatum(null);
         }
     }
-    
-    
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tbRashod = new javax.swing.JTable();
         jPanel2 = new javax.swing.JPanel();
@@ -152,23 +162,21 @@ public class RashodProzor extends javax.swing.JFrame {
 
         tbRashod.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
+
             },
             new String [] {
-                "Vrsta", "Primatelj", "Iznos", "Datum placanja", "Kolicina"
+                "Vrsta", "Osoba", "Iznos", "Količina", "Datum"
             }
         ) {
-            Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.Double.class, java.lang.Object.class, java.lang.Double.class
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false
             };
 
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
             }
         });
+        tbRashod.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(tbRashod);
 
         jLabel1.setText("Naziv rashoda");
@@ -296,7 +304,7 @@ public class RashodProzor extends javax.swing.JFrame {
                         .addComponent(txtIme, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(txtPrezime, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
                         .addComponent(btnDodajOsoba)))
                 .addContainerGap())
         );
@@ -338,58 +346,117 @@ public class RashodProzor extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 464, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 295, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 393, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(27, Short.MAX_VALUE))
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void cmbVrstaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbVrstaActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_cmbVrstaActionPerformed
-
-    private void txtVrstaFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtVrstaFocusLost
-        if (txtVrsta.getText().isBlank()) {
-            txtVrsta.setText("Upiši novi naziv");
+    private void txtPrezimeFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtPrezimeFocusLost
+        if (txtPrezime.getText().isBlank()) {
+            txtPrezime.setText("Upiši prezime");
         }
-    }//GEN-LAST:event_txtVrstaFocusLost
+    }//GEN-LAST:event_txtPrezimeFocusLost
 
-    private void txtVrstaFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtVrstaFocusGained
-        txtVrsta.setText("");
-    }//GEN-LAST:event_txtVrstaFocusGained
+    private void txtPrezimeFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtPrezimeFocusGained
+        txtPrezime.setText("");
+    }//GEN-LAST:event_txtPrezimeFocusGained
 
-    private void btnKreirajActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnKreirajActionPerformed
+    private void btnDodajOsobaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDodajOsobaActionPerformed
         try {
-            if (obrada.getEntitet() == null) {
-                obrada.setEntitet(new Rashod());
-            }
-            preuzmiVrijednosti();
-            obrada.create();
-            ucitaj();
+            obradaosoba.setEntitet(new Osoba());
+            var o = obradaosoba.getEntitet();
+            o.setIme(txtIme.getText());
+            o.setPrezime(txtPrezime.getText());
+            obradaosoba.create();
+            ucitajOsobe();
+        } catch (MojException e) {
+            JOptionPane.showMessageDialog(getRootPane(), e.getPoruka());
+        }
+    }//GEN-LAST:event_btnDodajOsobaActionPerformed
 
+    private void txtImeFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtImeFocusLost
+        if (txtIme.getText().isBlank()) {
+            txtIme.setText("Upiši ime");
+        }
+    }//GEN-LAST:event_txtImeFocusLost
+
+    private void txtImeFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtImeFocusGained
+        txtIme.setText("");
+    }//GEN-LAST:event_txtImeFocusGained
+
+    private void btnDodajVrstaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDodajVrstaActionPerformed
+        try {
+            obradavrsta.setEntitet(new Vrsta());
+            var v = obradavrsta.getEntitet();
+            v.setNaziv(txtVrsta.getText());
+            v.setPrihod(false);
+            obradavrsta.create();
+            System.out.println("Kreirao vrstu: " + v.getNaziv());
+            ucitajVrste();
         } catch (MojException ex) {
             JOptionPane.showMessageDialog(getRootPane(), ex.getPoruka());
         }
-    }//GEN-LAST:event_btnKreirajActionPerformed
+    }//GEN-LAST:event_btnDodajVrstaActionPerformed
+
+    private void btnObrisiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnObrisiActionPerformed
+        List<Rashod> entiteti = obrada.read();
+        var red = tbRashod.getSelectedRow();
+        obrada.setEntitet(entiteti.get(red));
+        if (obrada.getEntitet() == null) {
+            JOptionPane.showMessageDialog(getRootPane(), "Prvo odaberite stavku");
+            return;
+        }
+
+        if (JOptionPane.showConfirmDialog(
+            getRootPane(),
+            "Sigurno obrisati ?", "Brisanje", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.NO_OPTION) {
+        return;
+        }
+
+        try {
+
+            obrada.delete();
+            JOptionPane.showMessageDialog(getRootPane(), "Obrisano");
+            ucitaj();
+        } catch (MojException ex) {
+            JOptionPane.showMessageDialog(getRootPane(), ex.getPoruka());
+        }
+    }//GEN-LAST:event_btnObrisiActionPerformed
 
     private void btnPromjeniActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPromjeniActionPerformed
         List<Rashod> entiteti = obrada.read();
@@ -412,67 +479,33 @@ public class RashodProzor extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnPromjeniActionPerformed
 
-    private void btnObrisiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnObrisiActionPerformed
-        List<Rashod> entiteti = obrada.read();
-        var red = tbRashod.getSelectedRow();
-        obrada.setEntitet(entiteti.get(red));
-        if (obrada.getEntitet() == null) {
-            JOptionPane.showMessageDialog(getRootPane(), "Prvo odaberite stavku");
-            return;
-        }
-
-        if (JOptionPane.showConfirmDialog(
-                getRootPane(),
-                "Sigurno obrisati ?", "Brisanje", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.NO_OPTION) {
-            return;
-        }
-
+    private void btnKreirajActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnKreirajActionPerformed
         try {
-
-            obrada.delete();
-            JOptionPane.showMessageDialog(getRootPane(), "Obrisano");
+            if (obrada.getEntitet() == null) {
+                obrada.setEntitet(new Rashod());
+            }
+            preuzmiVrijednosti();
+            obrada.create();
             ucitaj();
+
         } catch (MojException ex) {
             JOptionPane.showMessageDialog(getRootPane(), ex.getPoruka());
         }
-    }//GEN-LAST:event_btnObrisiActionPerformed
+    }//GEN-LAST:event_btnKreirajActionPerformed
 
-    private void btnDodajVrstaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDodajVrstaActionPerformed
-        Session session = HibernateUtil.getSession(); 
-        Vrsta v;
-        v = new Vrsta();
-        v.setNaziv(txtVrsta.getText());
-        v.setPrihod(false);
-        session.save(v);
-        ucitajVrste();
-        System.out.println("Kreirao vrstu: " + v.getNaziv());
+    private void cmbVrstaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbVrstaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cmbVrstaActionPerformed
 
-
-    }//GEN-LAST:event_btnDodajVrstaActionPerformed
-
-    private void txtImeFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtImeFocusGained
-        txtIme.setText("");
-    }//GEN-LAST:event_txtImeFocusGained
-
-    private void btnDodajOsobaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDodajOsobaActionPerformed
-        
-    }//GEN-LAST:event_btnDodajOsobaActionPerformed
-
-    private void txtPrezimeFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtPrezimeFocusGained
-        txtPrezime.setText("");
-    }//GEN-LAST:event_txtPrezimeFocusGained
-
-    private void txtImeFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtImeFocusLost
-        if (txtIme.getText().isBlank()) {
-            txtIme.setText("Upiši ime");
+    private void txtVrstaFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtVrstaFocusLost
+        if (txtVrsta.getText().isBlank()) {
+            txtVrsta.setText("Upiši novi naziv");
         }
-    }//GEN-LAST:event_txtImeFocusLost
+    }//GEN-LAST:event_txtVrstaFocusLost
 
-    private void txtPrezimeFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtPrezimeFocusLost
-        if (txtPrezime.getText().isBlank()) {
-            txtPrezime.setText("Upiši prezime");
-        }
-    }//GEN-LAST:event_txtPrezimeFocusLost
+    private void txtVrstaFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtVrstaFocusGained
+        txtVrsta.setText("");
+    }//GEN-LAST:event_txtVrstaFocusGained
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -489,6 +522,7 @@ public class RashodProzor extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tbRashod;
