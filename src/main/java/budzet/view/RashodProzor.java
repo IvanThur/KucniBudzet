@@ -9,16 +9,17 @@ import budzet.controller.ObradaRashod;
 import budzet.controller.ObradaVrsta;
 import budzet.model.Osoba;
 import budzet.model.Rashod;
-import budzet.model.Stavka;
 import budzet.model.Vrsta;
+import budzet.util.HibernateUtil;
 import budzet.util.MojException;
 import com.github.lgooddatepicker.components.DatePickerSettings;
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -27,6 +28,7 @@ import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import org.hibernate.Session;
 
 /**
  *
@@ -37,14 +39,22 @@ public class RashodProzor extends javax.swing.JFrame {
     private DefaultTableModel m;
     private ObradaRashod obrada;
     private DecimalFormat nf;
-    private SimpleDateFormat df, fd;
-    private Rashod rashod;
+    
 
     /**
      * Creates new form RashodProzor
      */
     public RashodProzor() {
         initComponents();
+
+        DatePickerSettings dps = new DatePickerSettings(new Locale("hr", "HR"));
+        dps.setFormatForDatesCommonEra("dd.MM.yyyy");
+        dps.setTranslationClear("Očisti");
+        dps.setTranslationToday("Danas");
+        dpDatum.setSettings(dps);
+        DecimalFormatSymbols symbols = new DecimalFormatSymbols(new Locale("hr", "HR"));
+        nf = new DecimalFormat("###,###.00", symbols);
+
         postavke();
 
     }
@@ -52,13 +62,8 @@ public class RashodProzor extends javax.swing.JFrame {
     private void postavke() {
         ucitajOsobe();
         ucitajVrste();
-
         ucitaj();
 
-        DatePickerSettings dps = new DatePickerSettings(new Locale("hr", "HR"));
-        dps.setFormatForDatesCommonEra("dd.MM.yyyy");
-        dps.setTranslationClear("Očisti");
-        dps.setTranslationToday("Danas");
     }
 
     private void ucitaj() {
@@ -96,7 +101,12 @@ public class RashodProzor extends javax.swing.JFrame {
         var e = obrada.getEntitet();
         e.setVrsta((Vrsta) cmbVrsta.getSelectedItem());
         e.setOsoba((Osoba) cmbPlatitelj.getSelectedItem());
-        e.setIznos(new BigDecimal(Double.parseDouble(txtIznos.getText())));
+        try {
+            e.setIznos(new BigDecimal(nf.parse(txtIznos.getText()).toString()));
+            e.setKolicina(new BigDecimal(nf.parse(txtKolicina.getText()).toString()));
+        } catch (ParseException ex) {
+            Logger.getLogger(RashodProzor.class.getName()).log(Level.SEVERE, null, ex);
+        }
         if (dpDatum.getDate() != null) {
             e.setDatum(
                     Date.from(
@@ -109,6 +119,8 @@ public class RashodProzor extends javax.swing.JFrame {
             e.setDatum(null);
         }
     }
+    
+    
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -129,6 +141,12 @@ public class RashodProzor extends javax.swing.JFrame {
         btnKreiraj = new javax.swing.JButton();
         btnPromjeni = new javax.swing.JButton();
         btnObrisi = new javax.swing.JButton();
+        btnDodajVrsta = new javax.swing.JButton();
+        txtIme = new javax.swing.JTextField();
+        btnDodajOsoba = new javax.swing.JButton();
+        txtPrezime = new javax.swing.JTextField();
+        jLabel5 = new javax.swing.JLabel();
+        txtKolicina = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -152,12 +170,6 @@ public class RashodProzor extends javax.swing.JFrame {
             }
         });
         jScrollPane1.setViewportView(tbRashod);
-
-        cmbPlatitelj.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cmbPlatiteljActionPerformed(evt);
-            }
-        });
 
         jLabel1.setText("Naziv rashoda");
 
@@ -206,6 +218,42 @@ public class RashodProzor extends javax.swing.JFrame {
             }
         });
 
+        btnDodajVrsta.setText("Dodaj");
+        btnDodajVrsta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDodajVrstaActionPerformed(evt);
+            }
+        });
+
+        txtIme.setText("Upiši Ime");
+        txtIme.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txtImeFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtImeFocusLost(evt);
+            }
+        });
+
+        btnDodajOsoba.setText("Dodaj");
+        btnDodajOsoba.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDodajOsobaActionPerformed(evt);
+            }
+        });
+
+        txtPrezime.setText("Upiši Prezime");
+        txtPrezime.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txtPrezimeFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtPrezimeFocusLost(evt);
+            }
+        });
+
+        jLabel5.setText("Količina");
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -217,15 +265,13 @@ public class RashodProzor extends javax.swing.JFrame {
                         .addComponent(cmbVrsta, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(txtVrsta)
-                        .addContainerGap())
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnDodajVrsta))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel1)
                             .addComponent(jLabel2)
-                            .addComponent(cmbPlatitelj, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel1)
                             .addComponent(jLabel4)
-                            .addComponent(txtIznos, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addComponent(dpDatum, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
@@ -233,8 +279,26 @@ public class RashodProzor extends javax.swing.JFrame {
                                 .addGap(18, 18, 18)
                                 .addComponent(btnPromjeni)
                                 .addGap(18, 18, 18)
-                                .addComponent(btnObrisi)))
-                        .addGap(0, 9, Short.MAX_VALUE))))
+                                .addComponent(btnObrisi))
+                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
+                                    .addComponent(txtIznos, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGap(18, 18, 18)
+                                    .addComponent(txtKolicina))
+                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
+                                    .addComponent(jLabel3)
+                                    .addGap(113, 113, 113)
+                                    .addComponent(jLabel5))))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(cmbPlatitelj, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(txtIme, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(txtPrezime, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnDodajOsoba)))
+                .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -244,15 +308,25 @@ public class RashodProzor extends javax.swing.JFrame {
                 .addGap(16, 16, 16)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtVrsta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cmbVrsta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(11, 11, 11)
+                    .addComponent(cmbVrsta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnDodajVrsta))
+                .addGap(10, 10, 10)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(cmbPlatitelj, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(cmbPlatitelj, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(txtIme, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnDodajOsoba)
+                        .addComponent(txtPrezime, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(12, 12, 12)
-                .addComponent(jLabel3)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(jLabel5))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(txtIznos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtIznos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtKolicina, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(5, 5, 5)
                 .addComponent(jLabel4)
                 .addGap(18, 18, 18)
@@ -273,7 +347,7 @@ public class RashodProzor extends javax.swing.JFrame {
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 393, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(36, Short.MAX_VALUE))
+                .addContainerGap(27, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -294,16 +368,14 @@ public class RashodProzor extends javax.swing.JFrame {
     }//GEN-LAST:event_cmbVrstaActionPerformed
 
     private void txtVrstaFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtVrstaFocusLost
-        txtVrsta.setText("Upiši novi naziv");
+        if (txtVrsta.getText().isBlank()) {
+            txtVrsta.setText("Upiši novi naziv");
+        }
     }//GEN-LAST:event_txtVrstaFocusLost
 
     private void txtVrstaFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtVrstaFocusGained
         txtVrsta.setText("");
     }//GEN-LAST:event_txtVrstaFocusGained
-
-    private void cmbPlatiteljActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbPlatiteljActionPerformed
-
-    }//GEN-LAST:event_cmbPlatiteljActionPerformed
 
     private void btnKreirajActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnKreirajActionPerformed
         try {
@@ -365,8 +437,47 @@ public class RashodProzor extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnObrisiActionPerformed
 
+    private void btnDodajVrstaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDodajVrstaActionPerformed
+        Session session = HibernateUtil.getSession(); 
+        Vrsta v;
+        v = new Vrsta();
+        v.setNaziv(txtVrsta.getText());
+        v.setPrihod(false);
+        session.save(v);
+        ucitajVrste();
+        System.out.println("Kreirao vrstu: " + v.getNaziv());
+
+
+    }//GEN-LAST:event_btnDodajVrstaActionPerformed
+
+    private void txtImeFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtImeFocusGained
+        txtIme.setText("");
+    }//GEN-LAST:event_txtImeFocusGained
+
+    private void btnDodajOsobaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDodajOsobaActionPerformed
+        
+    }//GEN-LAST:event_btnDodajOsobaActionPerformed
+
+    private void txtPrezimeFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtPrezimeFocusGained
+        txtPrezime.setText("");
+    }//GEN-LAST:event_txtPrezimeFocusGained
+
+    private void txtImeFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtImeFocusLost
+        if (txtIme.getText().isBlank()) {
+            txtIme.setText("Upiši ime");
+        }
+    }//GEN-LAST:event_txtImeFocusLost
+
+    private void txtPrezimeFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtPrezimeFocusLost
+        if (txtPrezime.getText().isBlank()) {
+            txtPrezime.setText("Upiši prezime");
+        }
+    }//GEN-LAST:event_txtPrezimeFocusLost
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnDodajOsoba;
+    private javax.swing.JButton btnDodajVrsta;
     private javax.swing.JButton btnKreiraj;
     private javax.swing.JButton btnObrisi;
     private javax.swing.JButton btnPromjeni;
@@ -377,10 +488,14 @@ public class RashodProzor extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tbRashod;
+    private javax.swing.JTextField txtIme;
     private javax.swing.JTextField txtIznos;
+    private javax.swing.JTextField txtKolicina;
+    private javax.swing.JTextField txtPrezime;
     private javax.swing.JTextField txtVrsta;
     // End of variables declaration//GEN-END:variables
 }
