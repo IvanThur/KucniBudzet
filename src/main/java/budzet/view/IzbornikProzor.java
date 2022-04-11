@@ -28,10 +28,7 @@ public class IzbornikProzor extends javax.swing.JFrame {
         postavke();
     }
     private void postavke(){
-        setTitle("Izbornik moje super duper app");
-        
-        TablicaModelRashod m = new TablicaModelRashod(new ObradaRashod().read());
-        tbRashod.setModel(m);
+        setTitle("Izbornik");
         
         
     }
@@ -61,27 +58,12 @@ public class IzbornikProzor extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jScrollPane2 = new javax.swing.JScrollPane();
-        tbRashod = new javax.swing.JTable();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         mPrihod = new javax.swing.JMenu();
         mRashod = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
-        tbRashod.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
-            },
-            new String [] {
-                "Vrsta", "Osoba", "Cijena", "Količina", "Datum"
-            }
-        ));
-        jScrollPane2.setViewportView(tbRashod);
 
         jMenu1.setText("File");
         jMenuBar1.add(jMenu1);
@@ -109,20 +91,10 @@ public class IzbornikProzor extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 712, Short.MAX_VALUE)
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addGap(130, 130, 130)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 452, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(130, Short.MAX_VALUE)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 470, Short.MAX_VALUE)
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addGap(97, 97, 97)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 276, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(97, Short.MAX_VALUE)))
         );
 
         pack();
@@ -146,10 +118,8 @@ public class IzbornikProzor extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JMenu mPrihod;
     private javax.swing.JMenu mRashod;
-    private javax.swing.JTable tbRashod;
     // End of variables declaration//GEN-END:variables
 
 }

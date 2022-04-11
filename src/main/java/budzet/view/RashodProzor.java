@@ -481,9 +481,9 @@ public class RashodProzor extends javax.swing.JFrame {
 
     private void btnKreirajActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnKreirajActionPerformed
         try {
-            if (obrada.getEntitet() == null) {
+            
                 obrada.setEntitet(new Rashod());
-            }
+            
             preuzmiVrijednosti();
             obrada.create();
             ucitaj();
