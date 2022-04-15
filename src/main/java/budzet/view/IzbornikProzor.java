@@ -7,6 +7,8 @@ package budzet.view;
 import budzet.controller.Obrada;
 import budzet.controller.ObradaPrihod;
 import budzet.controller.ObradaRashod;
+import budzet.model.Prihod;
+import budzet.model.Rashod;
 import budzet.model.Stavka;
 import com.github.lgooddatepicker.components.DatePickerSettings;
 import java.math.BigDecimal;
@@ -25,8 +27,10 @@ import javax.swing.table.DefaultTableModel;
 public class IzbornikProzor extends javax.swing.JFrame {
 
     private DefaultTableModel m;
-    private ObradaRashod obrada;
+    private Obrada obrada;
     private DecimalFormat nf;
+    private ObradaPrihod obradaprihod;
+    private ObradaRashod obradarashod;
 
     private List<Stavka> stavka;
 
@@ -39,6 +43,10 @@ public class IzbornikProzor extends javax.swing.JFrame {
     }
 
     private void postavke() {
+        
+        obradaprihod=new ObradaPrihod();
+        obradarashod=new ObradaRashod();
+        
         setTitle("Izbornik");
 
         DatePickerSettings dps = new DatePickerSettings(new Locale("hr", "HR"));
@@ -56,7 +64,12 @@ public class IzbornikProzor extends javax.swing.JFrame {
 
     private void ucitaj() {
 
-
+        List<Stavka> stavka = new ArrayList<>();
+        List<Prihod> prihod = obradaprihod.read();
+        List<Rashod> rashod = obradarashod.read();
+        
+        stavka.addAll(prihod);
+        stavka.addAll(rashod);
         
          TablicaModelIzbornik m = new TablicaModelIzbornik(stavka);
          tbPregled.setModel(m);
