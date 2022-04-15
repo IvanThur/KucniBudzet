@@ -4,8 +4,14 @@
  */
 package budzet;
 
+import budzet.model.Prihod;
+import budzet.model.Rashod;
+import budzet.model.Stavka;
 import budzet.util.PocetniInsert;
 import budzet.view.SplashScreen;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  *
@@ -13,11 +19,17 @@ import budzet.view.SplashScreen;
  */
 public class Start {
 
+ 
+
     public static void main(String[] args) {
         //budzet.util.PocetniInsert.unosOperatera();
         //PocetniInsert.izvedi();
         new SplashScreen().setVisible(true);
+        
+
+       
 
     }
 
 }
+

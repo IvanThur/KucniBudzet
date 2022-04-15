@@ -16,6 +16,13 @@ public class TablicaModelRashod extends AbstractTableModel {
 
     private List<Rashod> rashod;
 
+    private final String[] tableHeaders = {"Naziv", "Osoba", "Iznos","Datum","Količina"};
+
+    @Override
+    public String getColumnName(int columnIndex) {
+        return tableHeaders[columnIndex];
+    }
+
     public TablicaModelRashod(List<Rashod> rashod) {
         this.rashod = rashod;
     }
@@ -35,11 +42,16 @@ public class TablicaModelRashod extends AbstractTableModel {
         Rashod p = rashod.get(rowIndex);
         Object value = "??";
         switch (columnIndex) {
-            case 0 ->value = p.getVrsta().getNaziv();
-            case 1 ->value = p.getOsoba();
-            case 2 ->value = p.getIznos();
-            case 3 ->value = p.getDatum();
-            case 4 ->value = p.getKolicina();
+            case 0 ->
+                value = p.getVrsta().getNaziv();
+            case 1 ->
+                value = p.getOsoba();
+            case 2 ->
+                value = p.getIznos();
+            case 3 ->
+                value = p.getDatum();
+            case 4 ->
+                value = p.getKolicina();
         }
         return value;
     }

@@ -16,6 +16,13 @@ public class TablicaModelPrihod extends AbstractTableModel {
 
     private List<Prihod> prihodi;
 
+    private final String[] tableHeaders = {"Naziv", "Osoba", "Iznos","Datum"};
+
+    @Override
+    public String getColumnName(int columnIndex) {
+        return tableHeaders[columnIndex];
+    }
+    
     public TablicaModelPrihod(List<Prihod> prihodi) {
         this.prihodi = prihodi;
     }

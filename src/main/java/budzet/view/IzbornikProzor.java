@@ -5,10 +5,17 @@
 package budzet.view;
 
 import budzet.controller.Obrada;
+import budzet.controller.ObradaPrihod;
 import budzet.controller.ObradaRashod;
 import budzet.model.Stavka;
+import com.github.lgooddatepicker.components.DatePickerSettings;
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
-import javax.swing.ImageIcon;
+import java.util.Locale;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -16,9 +23,12 @@ import javax.swing.table.DefaultTableModel;
  * @author Ivan
  */
 public class IzbornikProzor extends javax.swing.JFrame {
-    
-    private Obrada obrada;
+
     private DefaultTableModel m;
+    private ObradaRashod obrada;
+    private DecimalFormat nf;
+
+    private List<Stavka> stavka;
 
     /**
      * Creates new form IzbornikProzor
@@ -27,26 +37,32 @@ public class IzbornikProzor extends javax.swing.JFrame {
         initComponents();
         postavke();
     }
-    private void postavke(){
+
+    private void postavke() {
         setTitle("Izbornik");
-        
-        
+
+        DatePickerSettings dps = new DatePickerSettings(new Locale("hr", "HR"));
+        dps.setFormatForDatesCommonEra("dd.MM.yyyy");
+        dps.setTranslationClear("Očisti");
+        dps.setTranslationToday("Danas");
+        //dpDatum.setSettings(dps);
+
+        DecimalFormatSymbols symbols = new DecimalFormatSymbols(new Locale("hr", "HR"));
+        nf = new DecimalFormat("###,###.00", symbols);
+
+        ucitaj();
+
     }
-    
+
     private void ucitaj() {
 
-        List<Stavka> entiteti = obrada.read();
-        
-        Object[] red = new Object[5];
 
-        for (int i = 0; i < entiteti.size(); i++) {
-            red[0] = entiteti.get(i).getVrsta().getNaziv();
-            red[1] = entiteti.get(i).getOsoba().getIme();
-            red[2] = entiteti.get(i).getOsoba().getPrezime();
-            red[3] = entiteti.get(i).getIznos();
-            red[4] = entiteti.get(i).getDatum();
-            m.addRow(red);
-        }
+        
+         TablicaModelIzbornik m = new TablicaModelIzbornik(stavka);
+         tbPregled.setModel(m);
+         
+         
+
     }
 
     /**
@@ -58,12 +74,37 @@ public class IzbornikProzor extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tbPregled = new javax.swing.JTable();
+        jLabel1 = new javax.swing.JLabel();
+        txtTrazi = new javax.swing.JTextField();
+        dpPocetak = new com.github.lgooddatepicker.components.DatePicker();
+        dpKraj = new com.github.lgooddatepicker.components.DatePicker();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         mPrihod = new javax.swing.JMenu();
         mRashod = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        tbPregled.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane1.setViewportView(tbPregled);
+
+        jLabel1.setText("Traži");
+
+        txtTrazi.setText("Upiši naziv");
+        txtTrazi.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txtTraziFocusGained(evt);
+            }
+        });
 
         jMenu1.setText("File");
         jMenuBar1.add(jMenu1);
@@ -90,11 +131,37 @@ public class IzbornikProzor extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 712, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addComponent(txtTrazi, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(dpPocetak, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 74, Short.MAX_VALUE)
+                        .addComponent(dpKraj, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(58, 58, 58))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 470, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtTrazi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(44, 44, 44)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(dpPocetak, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(dpKraj, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(28, Short.MAX_VALUE))
         );
 
         pack();
@@ -109,17 +176,25 @@ public class IzbornikProzor extends javax.swing.JFrame {
         new RashodProzor().setVisible(true);
     }//GEN-LAST:event_mRashodMouseClicked
 
+    private void txtTraziFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtTraziFocusGained
+        txtTrazi.setText("");
+    }//GEN-LAST:event_txtTraziFocusGained
+
     /**
      * @param args the command line arguments
      */
-    
-   
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private com.github.lgooddatepicker.components.DatePicker dpKraj;
+    private com.github.lgooddatepicker.components.DatePicker dpPocetak;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JMenu mPrihod;
     private javax.swing.JMenu mRashod;
+    private javax.swing.JTable tbPregled;
+    private javax.swing.JTextField txtTrazi;
     // End of variables declaration//GEN-END:variables
 
 }
