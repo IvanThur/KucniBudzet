@@ -11,10 +11,13 @@ import budzet.model.Rashod;
 import budzet.model.Vrsta;
 import com.github.javafaker.Faker;
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 import org.hibernate.Session;
 import org.mindrot.jbcrypt.BCrypt;
 
@@ -87,7 +90,7 @@ public class PocetniInsert {
                 p = new Prihod();
                 p.setVrsta(v);
                 p.setOsoba(o);
-                p.setDatum(new Date());
+                p.setDatum(randomDatum());
                 p.setIznos(new BigDecimal(Math.random() * (10000 - 5000) + 5000));
                 Collections.shuffle(osobe);
                 session.save(p);
@@ -101,7 +104,7 @@ public class PocetniInsert {
                 r = new Rashod();
                 r.setVrsta(v);
                 r.setOsoba(o);
-                r.setDatum(new Date());
+                r.setDatum(randomDatum());
                 r.setIznos(new BigDecimal(Math.random() * (10000 - 5000) + 5000));
                 Collections.shuffle(osobe);
                 session.save(r);
@@ -112,6 +115,18 @@ public class PocetniInsert {
 
         session.getTransaction().commit();
 
+    }
+    
+    private static Date randomDatum() {
+        Random random = new Random();
+        ZoneId defaultZoneId = ZoneId.systemDefault();
+        int minDay = (int) LocalDate.of(2021, 1, 1).toEpochDay();
+        var maxDay = (int) LocalDate.of(2023, 1, 1).toEpochDay();
+        long randomDay = minDay + random.nextInt(maxDay - minDay);
+
+        LocalDate randomBirthDate = LocalDate.ofEpochDay(randomDay);
+        Date date = Date.from(randomBirthDate.atStartOfDay(defaultZoneId).toInstant());
+        return date;
     }
 
     

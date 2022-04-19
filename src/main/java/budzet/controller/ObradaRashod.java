@@ -38,7 +38,7 @@ public class ObradaRashod extends Obrada<Rashod> {
     }
 
     private void KontrolaIznos() throws MojException{
-        if(entitet.getIznos()==null||entitet.getIznos().compareTo(BigDecimal.ZERO)<0){
+        if(entitet.getIznos()==null){
             throw new MojException("Cijena mora biti unesen i veća od 0");
         }
     }

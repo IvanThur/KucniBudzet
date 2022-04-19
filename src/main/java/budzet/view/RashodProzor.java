@@ -43,6 +43,8 @@ public class RashodProzor extends javax.swing.JFrame {
      */
     public RashodProzor() {
         initComponents();
+        DecimalFormatSymbols symbols = new DecimalFormatSymbols(new Locale("hr", "HR"));
+        nf = new DecimalFormat("###,###.00", symbols);
         postavke();
         
 
@@ -87,7 +89,7 @@ public class RashodProzor extends javax.swing.JFrame {
         DefaultComboBoxModel<Vrsta> ms = new DefaultComboBoxModel<>();
         Vrsta v = new Vrsta();
         v.setSifra(Long.valueOf(0));
-        v.setNaziv("-");
+        v.setNaziv("Nije odabrano");
         ms.addElement(v);
         new ObradaVrsta().read().forEach(s -> {
             ms.addElement(s);
@@ -99,7 +101,7 @@ public class RashodProzor extends javax.swing.JFrame {
         DefaultComboBoxModel<Osoba> ms = new DefaultComboBoxModel<>();
         Osoba o = new Osoba();
         o.setSifra(Long.valueOf(0));
-        o.setIme("nije");
+        o.setIme("Nije");
         o.setPrezime("odabrano");
         ms.addElement(o);
         new ObradaOsoba().read().forEach(s -> {
@@ -113,7 +115,7 @@ public class RashodProzor extends javax.swing.JFrame {
         e.setVrsta((Vrsta) cmbVrsta.getSelectedItem());
         e.setOsoba((Osoba) cmbPlatitelj.getSelectedItem());
         try {
-            e.setIznos(new BigDecimal(nf.parse(txtIznos.getText()).toString()));
+            e.setIznos(new BigDecimal(nf.parse(txtIznos.getText()).toString()).multiply(BigDecimal.valueOf(-1)));
             e.setKolicina(new BigDecimal(nf.parse(txtKolicina.getText()).toString()));
         } catch (ParseException ex) {
             Logger.getLogger(RashodProzor.class.getName()).log(Level.SEVERE, null, ex);
