@@ -48,9 +48,6 @@ public class PrihodProzor extends javax.swing.JFrame {
         DecimalFormatSymbols symbols = new DecimalFormatSymbols(new Locale("hr", "HR"));
         nf = new DecimalFormat("###,###.00", symbols);
         postavke();
-        
-
-        
 
     }
 
@@ -58,33 +55,26 @@ public class PrihodProzor extends javax.swing.JFrame {
         obradavrsta = new ObradaVrsta();
         obradaosoba = new ObradaOsoba();
         obrada = new ObradaPrihod();
-        
-        
+
         DecimalFormatSymbols symbols = new DecimalFormatSymbols(new Locale("hr", "HR"));
         nf = new DecimalFormat("###,###.00", symbols);
-        
+
         DatePickerSettings dps = new DatePickerSettings(new Locale("hr", "HR"));
         dps.setFormatForDatesCommonEra("dd.MM.yyyy");
         dps.setTranslationClear("Očisti");
         dps.setTranslationToday("Danas");
         dpDatum.setSettings(dps);
-        
-        
-       
-        
+
         ucitajOsobe();
         ucitajVrste();
         ucitaj();
-       
 
     }
 
     private void ucitaj() {
         TablicaModelPrihod m = new TablicaModelPrihod(new ObradaPrihod().read());
         tbPrihod.setModel(m);
-        
-        
-    
+
     }
 
     private void ucitajVrste() {
@@ -413,7 +403,6 @@ public class PrihodProzor extends javax.swing.JFrame {
             obradavrsta.setEntitet(new Vrsta());
             var v = obradavrsta.getEntitet();
             v.setNaziv(txtVrsta.getText());
-            v.setPrihod(false);
             obradavrsta.create();
             System.out.println("Kreirao vrstu: " + v.getNaziv());
             ucitajVrste();
@@ -432,9 +421,9 @@ public class PrihodProzor extends javax.swing.JFrame {
         }
 
         if (JOptionPane.showConfirmDialog(
-            getRootPane(),
-            "Sigurno obrisati ?", "Brisanje", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.NO_OPTION) {
-        return;
+                getRootPane(),
+                "Sigurno obrisati ?", "Brisanje", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.NO_OPTION) {
+            return;
         }
 
         try {
@@ -470,9 +459,9 @@ public class PrihodProzor extends javax.swing.JFrame {
 
     private void btnKreirajActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnKreirajActionPerformed
         try {
-            
-                obrada.setEntitet(new Prihod());
-            
+
+            obrada.setEntitet(new Prihod());
+
             preuzmiVrijednosti();
             obrada.create();
             ucitaj();
