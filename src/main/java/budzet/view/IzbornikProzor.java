@@ -79,11 +79,7 @@ public class IzbornikProzor extends javax.swing.JFrame {
         List<Prihod> prihod = obradaprihod.read();
         List<Rashod> rashod = obradarashod.read();
 
-        /*
-         * if (txtTrazi.getText().equals("Upiši naziv") ||
-         * txtTrazi.getText().isEmpty()) { stavka.addAll(prihod);
-         * stavka.addAll(rashod); }
-         */
+        
         for (Prihod p : prihod) {
             if (chbFilter.isSelected() && chbDatum.isSelected()) {
                 if (p.getVrsta().getNaziv().toLowerCase().contains(txtTrazi.getText().toLowerCase()) && p.getDatum().after(datePickerToDate(dpPocetak)) && p.getDatum().before(datePickerToDate(dpKraj))) {
@@ -154,7 +150,6 @@ public class IzbornikProzor extends javax.swing.JFrame {
 
         jScrollPane1 = new javax.swing.JScrollPane();
         tbPregled = new javax.swing.JTable();
-        jLabel1 = new javax.swing.JLabel();
         txtTrazi = new javax.swing.JTextField();
         dpPocetak = new com.github.lgooddatepicker.components.DatePicker();
         dpKraj = new com.github.lgooddatepicker.components.DatePicker();
@@ -182,8 +177,6 @@ public class IzbornikProzor extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(tbPregled);
 
-        jLabel1.setText("Traži");
-
         txtTrazi.setText("Upiši naziv");
         txtTrazi.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
@@ -203,7 +196,7 @@ public class IzbornikProzor extends javax.swing.JFrame {
             }
         });
 
-        chbFilter.setText("Filtriraj po nazivu");
+        chbFilter.setText("Traži po nazivu");
         chbFilter.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 chbFilterActionPerformed(evt);
@@ -255,27 +248,25 @@ public class IzbornikProzor extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(txtTrazi, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(chbFilter)))
-                        .addGap(179, 179, 179))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(btnOsvjezi)
                         .addGap(27, 27, 27))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(dpPocetak, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel2))
-                        .addGap(29, 29, 29)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel3)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(dpKraj, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(dpPocetak, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel2))
+                                .addGap(29, 29, 29)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel3)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(dpKraj, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(chbDatum))))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(txtTrazi, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(chbDatum)))
+                                .addComponent(chbFilter)))
                         .addGap(9, 9, 9))))
         );
         layout.setVerticalGroup(
@@ -290,8 +281,7 @@ public class IzbornikProzor extends javax.swing.JFrame {
                             .addComponent(txtUkupno, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel4)))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(22, 22, 22)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(txtTrazi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(chbFilter))
@@ -347,7 +337,6 @@ public class IzbornikProzor extends javax.swing.JFrame {
     private javax.swing.JCheckBox chbFilter;
     private com.github.lgooddatepicker.components.DatePicker dpKraj;
     public com.github.lgooddatepicker.components.DatePicker dpPocetak;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;

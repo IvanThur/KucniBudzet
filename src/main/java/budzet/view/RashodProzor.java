@@ -45,6 +45,7 @@ public class RashodProzor extends javax.swing.JFrame {
         initComponents();
         DecimalFormatSymbols symbols = new DecimalFormatSymbols(new Locale("hr", "HR"));
         nf = new DecimalFormat("###,###.00", symbols);
+        setTitle("Rashod");
         postavke();
 
     }

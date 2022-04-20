@@ -47,6 +47,7 @@ public class PrihodProzor extends javax.swing.JFrame {
         initComponents();
         DecimalFormatSymbols symbols = new DecimalFormatSymbols(new Locale("hr", "HR"));
         nf = new DecimalFormat("###,###.00", symbols);
+        setTitle("Prihod");
         postavke();
 
     }
@@ -81,7 +82,7 @@ public class PrihodProzor extends javax.swing.JFrame {
         DefaultComboBoxModel<Vrsta> ms = new DefaultComboBoxModel<>();
         Vrsta v = new Vrsta();
         v.setSifra(Long.valueOf(0));
-        v.setNaziv("-");
+        v.setNaziv("nije odabrano");
         ms.addElement(v);
         new ObradaVrsta().read().forEach(s -> {
             ms.addElement(s);
