@@ -105,7 +105,7 @@ public class PocetniInsert {
                 r.setVrsta(v);
                 r.setOsoba(o);
                 r.setDatum(randomDatum());
-                r.setIznos(new BigDecimal(Math.random() * (10000 - 5000) + 5000));
+                r.setIznos(new BigDecimal(Math.random() * (10000 - 5000) + 5000).multiply(BigDecimal.valueOf(-1)));
                 Collections.shuffle(osobe);
                 session.save(r);
 

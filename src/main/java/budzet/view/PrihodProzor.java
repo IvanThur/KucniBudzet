@@ -45,6 +45,8 @@ public class PrihodProzor extends javax.swing.JFrame {
      */
     public PrihodProzor() {
         initComponents();
+        DecimalFormatSymbols symbols = new DecimalFormatSymbols(new Locale("hr", "HR"));
+        nf = new DecimalFormat("###,###.00", symbols);
         postavke();
         
 
@@ -58,7 +60,8 @@ public class PrihodProzor extends javax.swing.JFrame {
         obrada = new ObradaPrihod();
         
         
-        
+        DecimalFormatSymbols symbols = new DecimalFormatSymbols(new Locale("hr", "HR"));
+        nf = new DecimalFormat("###,###.00", symbols);
         
         DatePickerSettings dps = new DatePickerSettings(new Locale("hr", "HR"));
         dps.setFormatForDatesCommonEra("dd.MM.yyyy");
@@ -66,8 +69,7 @@ public class PrihodProzor extends javax.swing.JFrame {
         dps.setTranslationToday("Danas");
         dpDatum.setSettings(dps);
         
-        DecimalFormatSymbols symbols = new DecimalFormatSymbols(new Locale("hr", "HR"));
-        nf = new DecimalFormat("###,###.00", symbols);
+        
        
         
         ucitajOsobe();

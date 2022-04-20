@@ -72,5 +72,7 @@ public class TablicaModelIzbornik extends AbstractTableModel {
         }
         return null;
     }
+    
+    
 
 }

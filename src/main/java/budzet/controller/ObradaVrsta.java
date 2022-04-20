@@ -22,11 +22,13 @@ public class ObradaVrsta extends Obrada<Vrsta>{
     @Override
     protected void kontrolaCreate() throws MojException {
         KontrolaIme();
+        kontrolaNoviNaziv();
     }
 
     @Override
     protected void kontrolaUpdate() throws MojException {
         KontrolaIme();
+        kontrolaNoviNaziv();
     }
 
     @Override
@@ -35,9 +37,19 @@ public class ObradaVrsta extends Obrada<Vrsta>{
     }
 
     private void KontrolaIme() throws MojException {
-       if(!entitet.getNaziv().matches("\\p{L}+")){
+       if(!entitet.getNaziv().matches("\\p{L}+\\s+\\p{L}+")){
             throw new MojException("Ime smije sadržavati samo slova");
        }
+    }
+    
+    private void kontrolaNoviNaziv()throws MojException{
+         List<Vrsta> lista = session.createQuery("from Vrsta v "
+                + "where v.naziv=:naziv")
+                .setParameter("naziv", entitet.getNaziv()).list();
+        
+        if(lista!=null && lista.size()>0){
+            throw new MojException("Naziv postoji " + lista.get(0).getNaziv());
+        }
     }
     
 }
